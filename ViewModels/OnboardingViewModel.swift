@@ -9,6 +9,10 @@ import Foundation
 
 final class OnboardingViewModel {
     
+    var continueButtonTitle: String {
+        isLastPage ? "Get Started" : "Continue"
+    }
+    
     let pages: [OnboardingPage] = [
         
         OnboardingPage(

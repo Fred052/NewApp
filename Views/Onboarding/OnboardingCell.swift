@@ -10,10 +10,11 @@ final class OnboardingCell: UICollectionViewCell {
     
     static let identifier = "OnboardingCell"
     
+    var continueAction: (() -> Void)?
+    
     private let backgroundImageView: UIImageView = {
         
         let imageView = UIImageView()
-        
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -74,6 +75,15 @@ final class OnboardingCell: UICollectionViewCell {
         setupUI()
         setupConstraints()
         
+        continueButton.addTarget(self, action: #selector(continueButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func continueButtonTapped() {
+        continueAction?()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func setupUI() {
@@ -87,10 +97,6 @@ final class OnboardingCell: UICollectionViewCell {
         contentView.addSubview(continueButton)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private func setupConstraints() {
         
         NSLayoutConstraint.activate([
@@ -102,7 +108,7 @@ final class OnboardingCell: UICollectionViewCell {
             
             eyebrowLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             eyebrowLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28),
-            eyebrowLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 520),
+            eyebrowLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 540),
             
             titleLabel.leadingAnchor.constraint(equalTo: eyebrowLabel.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: eyebrowLabel.trailingAnchor),
@@ -115,17 +121,18 @@ final class OnboardingCell: UICollectionViewCell {
             continueButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             continueButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28),
             continueButton.heightAnchor.constraint(equalToConstant: 54),
-            continueButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -18)
+            continueButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -28)
         ])
     }
     
-    func configure(with page: OnboardingPage) {
+    func configure(with page: OnboardingPage, buttonTitle: String) {
         
         backgroundImageView.image = UIImage(named: page.imageName)
         
         eyebrowLabel.text = page.eyebrow
         titleLabel.text = page.title
         descriptionLabel.text = page.description
+        continueButton.setTitle(buttonTitle, for: .normal)
     }
 }
 

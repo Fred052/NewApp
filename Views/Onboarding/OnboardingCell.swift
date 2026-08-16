@@ -69,6 +69,8 @@ final class OnboardingCell: UICollectionViewCell {
         
     }()
     
+    private let pageIndicator = OnboardingPageIndicator(pageCount: 3)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -94,7 +96,10 @@ final class OnboardingCell: UICollectionViewCell {
         contentView.addSubview(eyebrowLabel)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(pageIndicator)
         contentView.addSubview(continueButton)
+        
+        pageIndicator.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func setupConstraints() {
@@ -118,6 +123,11 @@ final class OnboardingCell: UICollectionViewCell {
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 18),
             
+            pageIndicator.leadingAnchor.constraint(equalTo: continueButton.leadingAnchor),
+            pageIndicator.bottomAnchor.constraint(equalTo: continueButton.topAnchor, constant: -14),
+            pageIndicator.heightAnchor.constraint(equalToConstant: 6),
+            pageIndicator.widthAnchor.constraint(equalToConstant: 46),
+            
             continueButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             continueButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28),
             continueButton.heightAnchor.constraint(equalToConstant: 54),
@@ -125,7 +135,7 @@ final class OnboardingCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with page: OnboardingPage, buttonTitle: String) {
+    func configure(with page: OnboardingPage, buttonTitle: String, currentPage: Int) {
         
         backgroundImageView.image = UIImage(named: page.imageName)
         
@@ -133,6 +143,7 @@ final class OnboardingCell: UICollectionViewCell {
         titleLabel.text = page.title
         descriptionLabel.text = page.description
         continueButton.setTitle(buttonTitle, for: .normal)
+        pageIndicator.update(currentPage: currentPage)
     }
 }
 

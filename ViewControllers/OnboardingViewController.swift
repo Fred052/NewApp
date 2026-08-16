@@ -172,7 +172,7 @@ extension OnboardingViewController: UICollectionViewDelegate, UICollectionViewDa
             buttonTitle = "Continue"
         }
         
-        cell.configure(with: page, buttonTitle: buttonTitle)
+        cell.configure(with: page, buttonTitle: buttonTitle, currentPage: indexPath.item)
         
         cell.continueAction = { [weak self] in
             self?.continueButtonTapped()

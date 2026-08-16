@@ -20,6 +20,9 @@ final class  OnboardingPageIndicator: UIView {
         self.currentPage = currentPage
         
         super.init(frame: .zero)
+        
+        setupIndicator()
+        setupContraints()
     }
     
     required init?(coder: NSCoder) {
@@ -51,10 +54,40 @@ final class  OnboardingPageIndicator: UIView {
             let indicator = indicators[index]
             
             NSLayoutConstraint.activate([
-                indicator.centerXAnchor.constraint(equalTo: centerXAnchor),
                 indicator.centerYAnchor.constraint(equalTo: centerYAnchor),
                 indicator.heightAnchor.constraint(equalToConstant: 6),
+                indicator.widthAnchor.constraint(equalToConstant: index == currentPage ? 20 : 6)
             ])
+            
+            if index == 0 {
+                
+                indicator.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+            } else {
+                
+                indicator.leadingAnchor.constraint(equalTo: indicators[index - 1].trailingAnchor, constant: 7).isActive = true
+            }
+        }
+        
+        if let lastIndicator = indicators.last {
+            
+            lastIndicator.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        }
+    }
+    
+    func update(currentPage: Int) {
+        self.currentPage = currentPage
+        
+        for(index, indicator) in indicators.enumerated() {
+            indicator.backgroundColor = index == currentPage
+            ? .black
+            : UIColor.black.withAlphaComponent(0.18)
+            
+            for constraint in indicator.constraints {
+                if constraint.firstAttribute == .width {
+                    constraint.constant =
+                    index == currentPage ? 20 : 6
+                }
+            }
         }
     }
 }

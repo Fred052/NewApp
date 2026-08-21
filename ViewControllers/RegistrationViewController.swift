@@ -31,8 +31,8 @@ final class RegistrationViewController: UIViewController {
     private let confirmPasswordTitleLabel = UILabel()
     private let confirmPasswordTextField = UITextField()
     
-    private let createAccountButton = UIButton(type: .system)
-    private let appleButton = UIButton(type: .system)
+    private let createAccountButton = AppButton(title: "Create Account", style: .primary )
+    private let appleButton = AppButton(title: "Continue with Apple", style: .apple)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +61,7 @@ final class RegistrationViewController: UIViewController {
         var backConfiguration = UIButton.Configuration.plain()
         backConfiguration.image = UIImage(systemName: "chevron.left")
         backConfiguration.title = "Back"
-        backConfiguration.imagePadding = 12
+        backConfiguration.imagePadding = 8
         backConfiguration.baseForegroundColor = .black
         backButton.configuration = backConfiguration
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
@@ -82,19 +82,19 @@ final class RegistrationViewController: UIViewController {
     }
     
     private func setupForm() {
-        configureTitleLabel(nameTitleLabel, text: "NAME")
-        configureTextField(nameTextField, placeHolder: "Farid Suleymanzade")
+        configureTitleLabel(nameTitleLabel, text: "N A M E")
+        configureTextField(nameTextField, placeHolder: "Fred")
         
-        configureTitleLabel(emailTitleLabel, text: "EMAIL")
+        configureTitleLabel(emailTitleLabel, text: "E M A I L")
         configureTextField(emailTextField, placeHolder: "your@gmail.com")
         emailTextField.keyboardType = .emailAddress
         emailTextField.autocapitalizationType = .none
         
-        configureTitleLabel(passwordTitleLabel, text: "PASSWORD")
+        configureTitleLabel(passwordTitleLabel, text: "P A S S W O R D")
         configureTextField(passwordTextField, placeHolder: "At least 8 characters")
         passwordTextField.isSecureTextEntry = true
         
-        configureTitleLabel(confirmPasswordTitleLabel, text: "CONFIRM PASSWORD")
+        configureTitleLabel(confirmPasswordTitleLabel, text: "C O N F I R M  P A S S W O R D")
         configureTextField(confirmPasswordTextField, placeHolder: "Repeat Password")
         confirmPasswordTextField.isSecureTextEntry = true
     }
@@ -117,21 +117,8 @@ final class RegistrationViewController: UIViewController {
     }
     
     private func setupButtons() {
-        configureButton(createAccountButton, title: "Create Account", color: redColor)
         createAccountButton.addTarget(self, action: #selector(createAccountTapped), for: .touchUpInside)
-        
-        configureButton(appleButton, title: "Continue with Apple", color: .black)
-        appleButton.setImage(UIImage(systemName: "apple.logo"), for: .normal)
         appleButton.addTarget(self, action: #selector(appleTapped), for: .touchUpInside)
-    }
-    
-    private func configureButton(_ button: UIButton, title: String, color: UIColor) {
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.tintColor = .white
-        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .bold)
-        button.backgroundColor = color
-        button.layer.cornerRadius = 15
     }
     
     private func setupConstraints() {
@@ -206,9 +193,22 @@ final class RegistrationViewController: UIViewController {
         ])
     }
     
+    private func bindViewModel() {
+        viewModel.onMessageChanged = {[weak self] message in
+            let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default))
+            self?.present(alert, animated: true)
+        }
+    }
+    
     
     @objc private func backTapped() {
-        navigationController?.popViewController(animated: true)
+        if let navigationController,
+           navigationController.viewControllers.count > 1 {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
     }
     
     

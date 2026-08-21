@@ -9,21 +9,96 @@ import UIKit
 
 final class LoginViewController: UIViewController {
     
-    private let viewModel = LoginViewModel()
     
-    private let mutedColor = UIColor(red: 0.58, green: 0.55, blue: 0.53, alpha: 1)
-    private let redColor = UIColor(red: 0.72, green: 0.11, blue: 0.14, alpha: 1)
-    private let textColor = UIColor(red: 18 / 255, green: 16 / 255, blue: 15 / 255, alpha: 1)
+    private let newsLabel: UILabel = {
+        let newsLabel = UILabel()
+        newsLabel.text = "N E W S"
+        newsLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        newsLabel.translatesAutoresizingMaskIntoConstraints = false
+        return newsLabel
+    }()
     
-    private let newsLabel = UILabel()
-    private let closeButton = UIButton()
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
-    private let emailTitleLabel = UILabel()
-    private let emailTextField = UITextField()
-    private let passwordTitleLabel = UILabel()
-    private let passwordTextField = UITextField()
-    private let forgotPasswordButton = UIButton(type: .system)
+    private let closeButton: UIButton = {
+        let closeButton = UIButton()
+        closeButton.setTitle("Close", for: .normal)
+        closeButton.setTitleColor(.muted, for: .normal)
+        closeButton.titleLabel?.font = .systemFont(ofSize: 12)
+        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        return closeButton
+    }()
+    
+    private let titleLabel: UILabel = {
+       let titleLabel = UILabel()
+        titleLabel.text = "Welcome back"
+        titleLabel.font = UIFont(name: "IowanOldStyle-Roman", size: 28) ?? .systemFont(ofSize: 46)
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.75
+        return titleLabel
+    }()
+    
+    private let subtitleLabel: UILabel = {
+       let subtitleLabel = UILabel()
+        subtitleLabel.text = "Sign in to continue saving your favorite stories."
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.font = .systemFont(ofSize: 14)
+        subtitleLabel.textColor = .muted
+        return subtitleLabel
+    }()
+    
+    private let emailTitleLabel: UILabel = {
+        let emailTitleLabel = UILabel()
+        emailTitleLabel.text = "E M A I L"
+        emailTitleLabel.font = .systemFont(ofSize: 11.5, weight: .semibold)
+        emailTitleLabel.textColor = .muted
+        return emailTitleLabel
+    }()
+    
+    private let emailTextField: UITextField = {
+        let emailTextField = UITextField()
+        emailTextField.placeholder = "your@gmail.com"
+        emailTextField.font = .systemFont(ofSize: 15)
+        emailTextField.backgroundColor = .white
+        emailTextField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
+        emailTextField.layer.borderWidth = 1.5
+        emailTextField.layer.cornerRadius = 14
+        emailTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
+        emailTextField.leftViewMode = .always
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.autocapitalizationType = .none
+        return emailTextField
+    }()
+    
+    private let passwordTitleLabel: UILabel = {
+        let passwordTitleLabel = UILabel()
+        passwordTitleLabel.text = "P A S S W O R D"
+        passwordTitleLabel.font = .systemFont(ofSize: 11.5, weight: .semibold)
+        passwordTitleLabel.textColor = .muted
+        return passwordTitleLabel
+    }()
+    
+    private let passwordTextField: UITextField = {
+        let passwordTextField = UITextField()
+        passwordTextField.placeholder = "•••••••"
+        passwordTextField.font = .systemFont(ofSize: 15)
+        passwordTextField.backgroundColor = .white
+        passwordTextField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
+        passwordTextField.layer.borderWidth = 1.5
+        passwordTextField.layer.cornerRadius = 14
+        passwordTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
+        passwordTextField.leftViewMode = .always
+        passwordTextField.isSecureTextEntry = true
+        return passwordTextField
+    }()
+    
+    private let forgotPasswordButton: UIButton = {
+        let forgotPasswordButton = UIButton()
+        forgotPasswordButton.setTitle("Forgot Password?", for: .normal)
+        forgotPasswordButton.setTitleColor(.muted, for: .normal)
+        forgotPasswordButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
+        forgotPasswordButton.contentHorizontalAlignment = .right
+        forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordTapped), for: .touchUpInside)
+        return forgotPasswordButton
+    }()
     private let signInButton = AppButton(title: "Sign In", style: .primary)
     private let lefLineView = UIView()
     private let orLabel = UILabel()
@@ -32,8 +107,15 @@ final class LoginViewController: UIViewController {
     private let accountLabel = UILabel()
     private let createAccountButton = UIButton(type: .system)
     
+    private let viewModel = LoginViewModel()
+    
+    private let mutedColor = UIColor(red: 0.58, green: 0.55, blue: 0.53, alpha: 1)
+    private let redColor = UIColor(red: 0.72, green: 0.11, blue: 0.14, alpha: 1)
+    private let textColor = UIColor(red: 18 / 255, green: 16 / 255, blue: 15 / 255, alpha: 1)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = UIColor(red: 0.98, green: 0.97, blue: 0.96, alpha: 1)
         view.layoutMargins = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         
@@ -48,50 +130,9 @@ final class LoginViewController: UIViewController {
             
         }
         
-        setupHeader()
-        setupForm()
         setupButtons()
         setupDivider()
         setupFooter()
-    }
-    
-    
-    private func setupHeader() {
-        newsLabel.text = "N E W S"
-        newsLabel.font = .systemFont(ofSize: 15, weight: .bold)
-        
-        closeButton.setTitle("Close", for: .normal)
-        closeButton.setTitleColor(mutedColor, for: .normal)
-        closeButton.titleLabel?.font = .systemFont(ofSize: 12)
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        
-        titleLabel.text = "Welcome back"
-        titleLabel.font = UIFont(name: "IowanOldStyle-Roman", size: 28) ?? .systemFont(ofSize: 46)
-        titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.minimumScaleFactor = 0.75
-        
-        subtitleLabel.text = "Sign in to continue saving your favorite stories."
-        subtitleLabel.numberOfLines = 0
-        subtitleLabel.font = .systemFont(ofSize: 14)
-        subtitleLabel.textColor = mutedColor
-    }
-    
-    private func setupForm() {
-        
-        configureTitleLabel(emailTitleLabel, text: "E M A I L")
-        configureTextField(emailTextField, placeHolder: "your@gmail.com")
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.autocapitalizationType = .none
-        
-        configureTitleLabel(passwordTitleLabel, text: "P A S S W O R D")
-        configureTextField(passwordTextField, placeHolder: "•••••••")
-        passwordTextField.isSecureTextEntry = true
-        
-        forgotPasswordButton.setTitle("Forgot Password?", for: .normal)
-        forgotPasswordButton.setTitleColor(redColor, for: .normal)
-        forgotPasswordButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
-        forgotPasswordButton.contentHorizontalAlignment = .right
-        forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordTapped), for: .touchUpInside)
     }
     
     private func configureTitleLabel(_ label: UILabel, text: String) {
@@ -221,7 +262,13 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func closeTapped() {
-        dismiss(animated: true)
+        guard let navigationController = navigationController else {
+            dismiss(animated: true)
+            return
+        }
+        
+        let homeViewController = HomeViewController()
+        navigationController.setViewControllers([homeViewController], animated: true)
     }
     
     @objc private func forgotPasswordTapped() {

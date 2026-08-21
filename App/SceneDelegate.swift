@@ -16,11 +16,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let loginViewController = LoginViewController()
-        
-        let navigationController = UINavigationController(rootViewController: loginViewController)
+        let navigationController = UINavigationController()
         
         navigationController.setNavigationBarHidden(true, animated: false)
+        
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "HasSeenOnboarding")
+        
+        if hasSeenOnboarding {
+            let homeViewController = HomeViewController()
+            navigationController.setViewControllers([homeViewController], animated: false)
+        } else {
+            let onboardingViewController = OnboardingViewController()
+            navigationController.setViewControllers([onboardingViewController], animated: false)
+        }
         
         window.rootViewController = navigationController
         

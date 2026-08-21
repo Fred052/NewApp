@@ -56,6 +56,7 @@ final class OnboardingViewController: UIViewController {
         setupUI()
         setupCollectionView()
         setupAction()
+        updateHeader()
     }
     
     override func viewDidLayoutSubviews() {
@@ -144,6 +145,9 @@ final class OnboardingViewController: UIViewController {
     }
     
     private func goToHome() {
+        
+        UserDefaults.standard.set(true, forKey: "HasSeenOnboarding")
+        
         let homeViewController = HomeViewController()
         
         navigationController?.setViewControllers([homeViewController], animated: true)

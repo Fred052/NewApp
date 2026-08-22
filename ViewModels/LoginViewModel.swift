@@ -8,7 +8,6 @@
 import Foundation
 
 final class LoginViewModel {
-    
     var onMessageChanged: ((String) -> Void)?
     
     func signIn(with login: Login) {

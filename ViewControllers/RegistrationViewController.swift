@@ -10,28 +10,136 @@ import UIKit
 final class RegistrationViewController: UIViewController {
     private let viewModel = RegistrationViewModel()
     
-    private let mutedColor = UIColor(red: 0.58, green: 0.55, blue: 0.53, alpha: 1)
-    private let redColor = UIColor(red: 0.72, green: 0.11, blue: 0.14, alpha: 1)
+    private let backConfiguration: UIButton.Configuration = {
+        var backConfiguration = UIButton.Configuration.plain()
+        backConfiguration.image = UIImage(systemName: "chevron.left")
+        backConfiguration.title = "Back"
+        backConfiguration.imagePadding = 8
+        backConfiguration.baseForegroundColor = .black
+        return backConfiguration
+    }()
     
-    private let backButton = UIButton(type: .system)
-    private let newsLabel = UILabel()
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
+    private lazy var backButton: UIButton = {
+        let backButton = UIButton()
+        backButton.configuration = backConfiguration
+        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+        return backButton
+    }()
     
-    private let nameTitleLabel = UILabel()
-    private let nameTextField = UITextField()
+    private let newsLabel: UILabel = {
+        let newsLabel = UILabel()
+        newsLabel.text = "N E W S"
+        newsLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        newsLabel.textAlignment = .right
+        return newsLabel
+    }()
+    private let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Create your Account"
+        titleLabel.font = UIFont(name: "IowanOldStyle-Roman", size: 32) ?? .systemFont(ofSize: 46)
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.75
+        return titleLabel
+    }()
     
-    private let emailTitleLabel = UILabel()
-    private let emailTextField = UITextField()
+    private let subtitleLabel: UILabel = {
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "Save stories and build your personal news\nlibrary."
+        subtitleLabel.numberOfLines = 2
+        subtitleLabel.font = .systemFont(ofSize: 16)
+        subtitleLabel.textColor = .muted
+        return subtitleLabel
+    }()
     
+    private let nameTitleLabel: UILabel = {
+        let nameTitleLabel = UILabel()
+        nameTitleLabel.text = "N A M E"
+        nameTitleLabel.font = .systemFont(ofSize: 11.5, weight: .semibold)
+        nameTitleLabel.textColor = .muted
+        return nameTitleLabel
+    }()
     
-    private let passwordTitleLabel = UILabel()
-    private let passwordTextField = UITextField()
+    private let nameTextField: UITextField = {
+       let nameTextField = UITextField()
+        nameTextField.placeholder = "Fred"
+        nameTextField.font = .systemFont(ofSize: 15)
+        nameTextField.backgroundColor = .white
+        nameTextField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
+        nameTextField.layer.borderWidth = 1.5
+        nameTextField.layer.cornerRadius = 14
+        nameTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
+        nameTextField.leftViewMode = .always
+        return nameTextField
+    }()
     
-    private let confirmPasswordTitleLabel = UILabel()
-    private let confirmPasswordTextField = UITextField()
+    private let emailTitleLabel: UILabel = {
+        let emailTitleLabel = UILabel()
+        emailTitleLabel.text = "E M A I L"
+        emailTitleLabel.font = .systemFont(ofSize: 11.5, weight: .semibold)
+        emailTitleLabel.textColor = .muted
+        return emailTitleLabel
+    }()
     
-    private let createAccountButton = AppButton(title: "Create Account", style: .primary )
+    private let emailTextField: UITextField = {
+       let emailTextField = UITextField()
+        emailTextField.placeholder = "your@gmail.com"
+        emailTextField.font = .systemFont(ofSize: 15)
+        emailTextField.backgroundColor = .white
+        emailTextField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
+        emailTextField.layer.borderWidth = 1.5
+        emailTextField.layer.cornerRadius = 14
+        emailTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
+        emailTextField.leftViewMode = .always
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.autocapitalizationType = .none
+        return emailTextField
+    }()
+    
+    private let passwordTitleLabel: UILabel = {
+        let passwordTitleLabel = UILabel()
+        passwordTitleLabel.text = "P A S S W O R D"
+        passwordTitleLabel.font = .systemFont(ofSize: 11.5, weight: .semibold)
+        passwordTitleLabel.textColor = .muted
+        return passwordTitleLabel
+    }()
+    
+    private let passwordTextField: UITextField = {
+        let passwordTextField = UITextField()
+        passwordTextField.placeholder = "At least 8 characters"
+        passwordTextField.font = .systemFont(ofSize: 15)
+        passwordTextField.backgroundColor = .white
+        passwordTextField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
+        passwordTextField.layer.borderWidth = 1.5
+        passwordTextField.layer.cornerRadius = 14
+        passwordTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
+        passwordTextField.leftViewMode = .always
+        passwordTextField.isSecureTextEntry = true
+        return passwordTextField
+    }()
+    
+    private let confirmPasswordTitleLabel: UILabel = {
+        let confirmPasswordTitleLabel = UILabel()
+        confirmPasswordTitleLabel.text = "C O N F I R M  P A S S W O R D"
+        confirmPasswordTitleLabel.font = .systemFont(ofSize: 11.5, weight: .semibold)
+        confirmPasswordTitleLabel.textColor = .muted
+        return confirmPasswordTitleLabel
+    }()
+    
+    private let confirmPasswordTextField: UITextField = {
+       let confirmPasswordTextField = UITextField()
+        confirmPasswordTextField.placeholder = "Repeat Password"
+        confirmPasswordTextField.font = .systemFont(ofSize: 15)
+        confirmPasswordTextField.backgroundColor = .white
+        confirmPasswordTextField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
+        confirmPasswordTextField.layer.borderWidth = 1.5
+        confirmPasswordTextField.layer.cornerRadius = 14
+        confirmPasswordTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
+        confirmPasswordTextField.leftViewMode = .always
+        confirmPasswordTextField.isSecureTextEntry = true
+        return confirmPasswordTextField
+    }()
+    
+    private let createAccountButton = AppButton(title: "Create Account", style: .primary)
     private let appleButton = AppButton(title: "Continue with Apple", style: .apple)
     
     override func viewDidLoad() {
@@ -43,77 +151,13 @@ final class RegistrationViewController: UIViewController {
         setupConstraints()
     }
     
-    
     private func setupUI() {
         [backButton, newsLabel, titleLabel, subtitleLabel, nameTitleLabel, nameTextField, emailTitleLabel, emailTextField, passwordTitleLabel, passwordTextField, confirmPasswordTitleLabel, confirmPasswordTextField, createAccountButton, appleButton].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
-        setupHeader()
-        setupForm()
         setupButtons()
         
-    }
-    
-    
-    private func setupHeader() {
-        var backConfiguration = UIButton.Configuration.plain()
-        backConfiguration.image = UIImage(systemName: "chevron.left")
-        backConfiguration.title = "Back"
-        backConfiguration.imagePadding = 8
-        backConfiguration.baseForegroundColor = .black
-        backButton.configuration = backConfiguration
-        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
-        
-        newsLabel.text = "N E W S"
-        newsLabel.font = .systemFont(ofSize: 15, weight: .bold)
-        newsLabel.textAlignment = .right
-        
-        titleLabel.text = "Create your Account"
-        titleLabel.font = UIFont(name: "IowanOldStyle-Roman", size: 32) ?? .systemFont(ofSize: 46)
-        titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.minimumScaleFactor = 0.75
-        
-        subtitleLabel.text = "Save stories and build your personal news\nlibrary."
-        subtitleLabel.numberOfLines = 2
-        subtitleLabel.font = .systemFont(ofSize: 16)
-        subtitleLabel.textColor = mutedColor
-    }
-    
-    private func setupForm() {
-        configureTitleLabel(nameTitleLabel, text: "N A M E")
-        configureTextField(nameTextField, placeHolder: "Fred")
-        
-        configureTitleLabel(emailTitleLabel, text: "E M A I L")
-        configureTextField(emailTextField, placeHolder: "your@gmail.com")
-        emailTextField.keyboardType = .emailAddress
-        emailTextField.autocapitalizationType = .none
-        
-        configureTitleLabel(passwordTitleLabel, text: "P A S S W O R D")
-        configureTextField(passwordTextField, placeHolder: "At least 8 characters")
-        passwordTextField.isSecureTextEntry = true
-        
-        configureTitleLabel(confirmPasswordTitleLabel, text: "C O N F I R M  P A S S W O R D")
-        configureTextField(confirmPasswordTextField, placeHolder: "Repeat Password")
-        confirmPasswordTextField.isSecureTextEntry = true
-    }
-    
-    private func configureTitleLabel(_ label: UILabel, text: String) {
-        label.text = text
-        label.font = .systemFont(ofSize: 11.5, weight: .semibold)
-        label.textColor = mutedColor
-    }
-    
-    private func configureTextField(_ textField: UITextField, placeHolder: String) {
-        textField.placeholder = placeHolder
-        textField.font = .systemFont(ofSize: 15)
-        textField.backgroundColor = .white
-        textField.layer.borderColor =  UIColor(white: 0.88, alpha: 1).cgColor
-        textField.layer.borderWidth = 1.5
-        textField.layer.cornerRadius = 14
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 1))
-        textField.leftViewMode = .always
     }
     
     private func setupButtons() {
@@ -127,7 +171,6 @@ final class RegistrationViewController: UIViewController {
         let margins = view.layoutMarginsGuide
         
         NSLayoutConstraint.activate([
-            
             backButton.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             backButton.heightAnchor.constraint(equalToConstant: 13),
@@ -189,7 +232,6 @@ final class RegistrationViewController: UIViewController {
             appleButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             appleButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
             appleButton.heightAnchor.constraint(equalTo: createAccountButton.heightAnchor)
-            
         ])
     }
     
@@ -201,7 +243,6 @@ final class RegistrationViewController: UIViewController {
         }
     }
     
-    
     @objc private func backTapped() {
         if let navigationController,
            navigationController.viewControllers.count > 1 {
@@ -210,7 +251,6 @@ final class RegistrationViewController: UIViewController {
             dismiss(animated: true)
         }
     }
-    
     
     @objc private func createAccountTapped() {
         let registration = Registration(
@@ -225,5 +265,4 @@ final class RegistrationViewController: UIViewController {
     @objc private func appleTapped() {
         viewModel.continueWithApple()
     }
-    
 }

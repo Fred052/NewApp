@@ -11,10 +11,9 @@ final class OnboardingViewController: UIViewController {
     
     private let viewModel = OnboardingViewModel()
     
-    private let collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
-        
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         
@@ -23,13 +22,15 @@ final class OnboardingViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.identifier)
         
         return collectionView
     }()
     
     private let newsLabel: UILabel = {
-       let label = UILabel()
-        
+        let label = UILabel()
         label.text = "NEWS"
         label.textColor = .white
         
@@ -54,7 +55,6 @@ final class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-        setupCollectionView()
         setupAction()
         updateHeader()
     }
@@ -92,13 +92,6 @@ final class OnboardingViewController: UIViewController {
         
         view.bringSubviewToFront(newsLabel)
         view.bringSubviewToFront(skipButton)
-    }
-    
-    private func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        collectionView.register(OnboardingCell.self, forCellWithReuseIdentifier: OnboardingCell.identifier)
     }
     
     private func setupAction() {

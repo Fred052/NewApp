@@ -8,13 +8,11 @@
 import Foundation
 
 final class OnboardingViewModel {
-    
     var continueButtonTitle: String {
         isLastPage ? "Get Started" : "Continue"
     }
     
     let pages: [OnboardingPage] = [
-        
         OnboardingPage(
             imageName: "onboarding1",
             eyebrow: "DISCOVER WHAT'S HAPPENING",
@@ -50,7 +48,6 @@ final class OnboardingViewModel {
     }
     
     func moveToNextPage() -> Bool {
-        
         guard !isLastPage else {
             return false
         }

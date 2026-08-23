@@ -140,10 +140,7 @@ final class OnboardingViewController: UIViewController {
     private func goToHome() {
         
         UserDefaults.standard.set(true, forKey: "HasSeenOnboarding")
-        
-        let homeViewController = HomeViewController()
-        
-        navigationController?.setViewControllers([homeViewController], animated: true)
+        view.window?.rootViewController = MainTabBarController()
     }
 }
 

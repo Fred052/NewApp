@@ -23,14 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "HasSeenOnboarding")
         
         if hasSeenOnboarding {
-            let homeViewController = HomeViewController()
-            navigationController.setViewControllers([homeViewController], animated: false)
+            window.rootViewController = MainTabBarController()
         } else {
             let onboardingViewController = OnboardingViewController()
-            navigationController.setViewControllers([onboardingViewController], animated: false)
+            let navigationController = UINavigationController(rootViewController: onboardingViewController)
+            
+            navigationController.setNavigationBarHidden(true, animated: false)
+            window.rootViewController = navigationController
         }
-        
-        window.rootViewController = navigationController
         
         self.window = window
         window.makeKeyAndVisible()

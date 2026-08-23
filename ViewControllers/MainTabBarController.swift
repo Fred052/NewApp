@@ -1,0 +1,78 @@
+//
+//  MainTabBarController.swift
+//  NewApp
+//
+//  Created by Ferid Suleymanzade on 23.08.26.
+//
+
+import UIKit
+
+final class MainTabBarController: UITabBarController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupTabs()
+        setupTabBarAppearance()
+    }
+    
+    private func setupTabs() {
+        let homeVC = HomeViewController()
+        let searchVC = SearchViewController()
+        let savedVC = SavedViewController()
+        let profileVC = ProfileViewController()
+        
+        homeVC.tabBarItem = UITabBarItem(
+            title: "Home",
+            image: UIImage(systemName: "house"),
+            selectedImage: UIImage(systemName: "house.fill")
+        )
+        
+        searchVC.tabBarItem = UITabBarItem(
+            title: "Search",
+            image: UIImage(systemName: "magnifyingglass"),
+            selectedImage: UIImage(systemName: "magnifyingglass")
+        )
+        
+        savedVC.tabBarItem = UITabBarItem(
+            title: "Saved",
+            image: UIImage(systemName: "bookmark"),
+            selectedImage: UIImage(systemName: "bookmark.fill")
+        )
+        
+        profileVC.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person"),
+            selectedImage: UIImage(systemName: "person.fill")
+        )
+        
+        viewControllers = [
+            UINavigationController(rootViewController: homeVC),
+            UINavigationController(rootViewController: searchVC),
+            UINavigationController(rootViewController: savedVC),
+            UINavigationController(rootViewController: profileVC)
+        ]
+    }
+    
+    private func setupTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        
+        appearance.backgroundColor = .white
+        appearance.shadowColor = UIColor.systemGray5
+        
+        appearance.stackedLayoutAppearance.normal.iconColor = .systemGray
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.systemGray]
+        
+        appearance.stackedLayoutAppearance.selected.iconColor = .systemRed
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: UIColor.systemRed
+        ]
+        
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+        
+        tabBar.tintColor = .systemRed
+        tabBar.unselectedItemTintColor = .systemGray
+    }
+}

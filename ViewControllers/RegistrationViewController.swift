@@ -149,6 +149,7 @@ final class RegistrationViewController: UIViewController {
         
         setupUI()
         setupConstraints()
+        bindViewModel()
     }
     
     private func setupUI() {

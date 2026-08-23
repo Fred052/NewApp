@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 final class RegistrationViewModel {
     
@@ -38,7 +39,48 @@ final class RegistrationViewModel {
             return
         }
         
-        onMessageChanged?("Your account has been successfully created.")
+        // Check Existing User
+        guard !userExists(email: registration.email) else {
+            onMessageChanged?("An account with this email already exists.")
+            
+            return
+        }
+        
+        // Create User
+        let context = CoreDataManager.shared.context
+        
+        let user = User(context: context)
+        
+        user.id = UUID()
+        user.name = registration.name
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        user.email = registration.email
+            .trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        user.password = registration.password
+        
+        // Save User 
+        do {
+            try context.save()
+            onMessageChanged?("Your account has been successfully created.")
+        } catch {
+            print("Failed to save user: \(error)")
+            onMessageChanged?("Something went wrong. Please try again.")
+        }
+    }
+    
+    private func userExists(email: String) -> Bool {
+        let context = CoreDataManager.shared.context
+        
+        let request = User.fetchRequest()
+        request.predicate = NSPredicate(format: "email ==[c] %@", email.trimmingCharacters(in: .whitespacesAndNewlines))
+        
+        do {
+            let users = try context.fetch(request)
+            return !users.isEmpty
+        } catch {
+            print("Failed to fetch user: \(error)")
+            return false
+        }
     }
     
     func continueWithApple() {

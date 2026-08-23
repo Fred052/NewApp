@@ -149,6 +149,7 @@ final class LoginViewController: UIViewController {
         
         setupUI()
         setupConstraints()
+        bindViewModel()
     }
     
     private func setupUI() {
@@ -243,11 +244,29 @@ final class LoginViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.onMessageChanged = {[weak self] message in
-            let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default))
-            self?.present(alert, animated: true)
+        viewModel.onMessageChanged = { [weak self] message in
+            DispatchQueue.main.async {
+                self?.showMessage(message)
+            }
         }
+        
+        viewModel.onLoginSuccess = { [weak self] in
+            DispatchQueue.main.async {
+                self?.goToHome()
+            }
+            
+        }
+    }
+    
+    private func goToHome() {
+        let homeVC = HomeViewController()
+        navigationController?.setViewControllers([homeVC], animated: true)
+    }
+    
+    private func showMessage(_ message: String) {
+        let alert = UIAlertController(title: "Login", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     @objc private func closeTapped() {
@@ -265,8 +284,11 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func signInTapped() {
-        let login = Login(email: emailTextField.text ?? "", password: passwordTextField.text ?? "")
-        viewModel.signIn(with: login)
+        print("SIGN IN BUTTON TAPPED")
+        
+        viewModel.login(
+            email: emailTextField.text ?? "",
+            password: passwordTextField.text ?? "")
     }
     
     @objc private func appleTapped() {

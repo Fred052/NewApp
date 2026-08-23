@@ -6,27 +6,55 @@
 //
 
 import Foundation
+import CoreData
 
 final class LoginViewModel {
     var onMessageChanged: ((String) -> Void)?
+    var onLoginSuccess: (() -> Void)?
     
-    func signIn(with login: Login) {
-        guard login.email.contains("@") else {
+    func login(email: String, password: String) {
+        
+        let cleanEmail = email
+            .trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        
+        guard !cleanEmail.isEmpty else {
+            onMessageChanged?("Please enter your email.")
+            
+            return
+        }
+        
+        guard cleanEmail.contains("@") else {
             onMessageChanged?("Enter a valid email address.")
             
             return
         }
         
-        guard !login.password.isEmpty else {
+        guard !password.isEmpty else {
             onMessageChanged?("Please enter your password")
             
             return
         }
         
-        onMessageChanged?("Login successful")
+        let context = CoreDataManager.shared.context
+        let request = User.fetchRequest()
+        request.predicate = NSPredicate(format: "email ==[c] %@ AND password == %@", cleanEmail, password)
+        
+        do {
+            let users = try context.fetch(request)
+            
+            if users.first != nil {
+                UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                onLoginSuccess?()
+            } else {
+                onMessageChanged?("Email or password is incorrect.")
+            }
+        } catch {
+            print("Failed to fetch user: \(error)")
+            onMessageChanged?("Something went wrong. Please try again.")
+        }
     }
     
     func continueWithApple() {
-        onMessageChanged?("The decision was made to continue with Apple.")
+        onMessageChanged?("The choice was to continue with Apple.")
     }
 }

@@ -58,7 +58,7 @@ final class RegistrationViewModel {
             .trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         user.password = registration.password
         
-        // Save User 
+        // Save User
         do {
             try context.save()
             onMessageChanged?("Your account has been successfully created.")

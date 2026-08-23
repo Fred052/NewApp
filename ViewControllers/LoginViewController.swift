@@ -270,13 +270,7 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func closeTapped() {
-        guard let navigationController = navigationController else {
-            dismiss(animated: true)
-            return
-        }
-        
-        let homeViewController = HomeViewController()
-        navigationController.setViewControllers([homeViewController], animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func forgotPasswordTapped() {

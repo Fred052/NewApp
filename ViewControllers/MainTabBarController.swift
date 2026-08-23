@@ -47,10 +47,10 @@ final class MainTabBarController: UITabBarController {
         )
         
         viewControllers = [
-            UINavigationController(rootViewController: homeVC),
-            UINavigationController(rootViewController: searchVC),
-            UINavigationController(rootViewController: savedVC),
-            UINavigationController(rootViewController: profileVC)
+            makeNavigationController(rootViewController: homeVC),
+            makeNavigationController(rootViewController: searchVC),
+            makeNavigationController(rootViewController: savedVC),
+            makeNavigationController(rootViewController: profileVC)
         ]
     }
     
@@ -74,5 +74,12 @@ final class MainTabBarController: UITabBarController {
         
         tabBar.tintColor = .systemRed
         tabBar.unselectedItemTintColor = .systemGray
+    }
+    
+    private func makeNavigationController(rootViewController: UIViewController) -> UINavigationController {
+        let navigationController = UINavigationController(rootViewController: rootViewController)
+        
+        navigationController.setNavigationBarHidden(true, animated: false)
+        return navigationController
     }
 }

@@ -22,7 +22,7 @@ final class ProfileViewController: UIViewController {
         let label = UILabel()
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = UIFont(name: "IowanOldStyle-Roman", size: 17) ?? .systemFont(ofSize: 46)
+        label.font = UIFont(name: "IowanOldStyle-Roman", size: 19) ?? .systemFont(ofSize: 46)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -32,7 +32,7 @@ final class ProfileViewController: UIViewController {
        let label = UILabel()
         label.textAlignment = .center
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .systemGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

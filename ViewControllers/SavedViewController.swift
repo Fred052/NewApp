@@ -141,7 +141,9 @@ final class SavedViewController: UIViewController {
     }
     
     @objc private func  sigInButtonTapped() {
-        navigationController?.pushViewController(LoginViewController(), animated: true)
+        let loginViewController = LoginViewController()
+        loginViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(loginViewController, animated: true)
     }
 }
 

@@ -259,8 +259,12 @@ final class LoginViewController: UIViewController {
     }
     
     private func goToHome() {
-        let homeVC = HomeViewController()
-        navigationController?.setViewControllers([homeVC], animated: true)
+        UserDefaults.standard.set(true, forKey: "IsLoggedIn")
+
+        let mainTabBarController = MainTabBarController()
+        mainTabBarController.selectedIndex = 3
+
+        view.window?.rootViewController = mainTabBarController
     }
     
     private func showMessage(_ message: String) {
@@ -291,6 +295,7 @@ final class LoginViewController: UIViewController {
     
     @objc private func createAccountTapped() {
         let registrationViewController = RegistrationViewController()
+        registrationViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(registrationViewController, animated: true)
     }
 }

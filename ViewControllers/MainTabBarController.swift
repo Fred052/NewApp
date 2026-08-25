@@ -20,7 +20,13 @@ final class MainTabBarController: UITabBarController {
         let homeVC = HomeViewController()
         let searchVC = SearchViewController()
         let savedVC = SavedViewController()
-        let profileVC = ProfileViewController()
+        let profileVC: UIViewController
+        
+        if UserDefaults.standard.bool(forKey: "IsLoggedIn") {
+            profileVC = LoggedInProfileViewController()
+        } else {
+            profileVC = ProfileViewController()
+        }
         
         homeVC.tabBarItem = UITabBarItem(
             title: "Home",

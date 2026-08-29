@@ -10,6 +10,15 @@ import UIKit
 final class NewsTableViewCell: UITableViewCell {
     static let identifier = "NewsTableViewCell"
     
+    var onbookmarkTapped: (() -> Void)?
+    
+    private var isBookmarked: Bool = false {
+        didSet {
+            let imageName = isBookmarked ? "bookmark.fill" : "bookmark"
+            bookmarkButton.setImage(UIImage(systemName: imageName), for: .normal)
+        }
+    }
+    
     private lazy var containerView: UIView = {
         let view = UIView()
         view.clipsToBounds = true
@@ -61,9 +70,20 @@ final class NewsTableViewCell: UITableViewCell {
     private lazy var sourceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13)
-        label.textColor = .lightGray
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private lazy var bookmarkButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+        button.layer.cornerRadius = 12
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     override init(
@@ -80,6 +100,12 @@ final class NewsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        onbookmarkTapped = nil
+        isBookmarked = false
+    }
+    
     private func setupUI() {
         
         selectionStyle = .none
@@ -91,6 +117,7 @@ final class NewsTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(sourceLabel)
+        contentView.addSubview(bookmarkButton)
         
         NSLayoutConstraint.activate([
             
@@ -121,17 +148,32 @@ final class NewsTableViewCell: UITableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: sourceLabel.topAnchor, constant: -24),
             
             sourceLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24),
-            sourceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -28)
+            sourceLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -28),
+            
+            bookmarkButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -24),
+            bookmarkButton.centerYAnchor.constraint(equalTo: sourceLabel.centerYAnchor),
+            bookmarkButton.widthAnchor.constraint(equalToConstant: 40),
+            bookmarkButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
-     func configure(with news: News) {
+    @objc private func bookmarkButtonTapped() {
+        onbookmarkTapped?()
+    }
+    
+    func setBookmarked(_ bookmarked: Bool) {
+        isBookmarked = bookmarked
+    }
+    
+     func configure(with news: News, isbookmarked: Bool = false) {
         categoryLabel.text = news.category
         titleLabel.text = news.title
-        descriptionLabel.text = news.description
+        descriptionLabel.text = news.summary
         
-        sourceLabel.text = "\(news.source) · \(news.time)"
+        sourceLabel.text = "\(news.source) · \(news.publishedAt)"
         
         newsImageView.image = UIImage(named: news.imageName)
+         
+         self.isBookmarked = isbookmarked
     }
 }

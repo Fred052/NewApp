@@ -237,10 +237,26 @@ final class RegistrationViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.onMessageChanged = {[weak self] message in
+        viewModel.onMessageChanged = { [weak self] message in
             let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default))
             self?.present(alert, animated: true)
+        }
+        
+        viewModel.onRegistrationSuccess = { [weak self] in
+            guard let self else { return }
+            
+            let alert = UIAlertController(
+                title: nil,
+                message: "Your account has been successfully created.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                let loginViewController = LoginViewController()
+                loginViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(loginViewController, animated: true)
+            })
+            self.present(alert, animated: true)
         }
     }
     

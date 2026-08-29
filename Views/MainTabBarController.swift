@@ -19,14 +19,8 @@ final class MainTabBarController: UITabBarController {
     private func setupTabs() {
         let homeVC = HomeViewController()
         let searchVC = SearchViewController()
-        let savedVC = SavedViewController()
-        let profileVC: UIViewController
-        
-        if UserDefaults.standard.bool(forKey: "IsLoggedIn") {
-            profileVC = LoggedInProfileViewController()
-        } else {
-            profileVC = ProfileViewController()
-        }
+        let savedVC = makeSavedViewController()
+        let profileVC = makeProfileViewController()
         
         homeVC.tabBarItem = UITabBarItem(
             title: "Home",
@@ -58,6 +52,18 @@ final class MainTabBarController: UITabBarController {
             makeNavigationController(rootViewController: savedVC),
             makeNavigationController(rootViewController: profileVC)
         ]
+    }
+    
+    private var isLoggedIn: Bool {
+        UserDefaults.standard.bool(forKey: "IsLoggedIn")
+    }
+    
+    private func makeSavedViewController() -> UIViewController {
+        isLoggedIn ? LoggedInSavedViewController() : SavedViewController()
+    }
+    
+    private func makeProfileViewController() -> UIViewController {
+        isLoggedIn ? LoggedInProfileViewController() : ProfileViewController()
     }
     
     private func setupTabBarAppearance() {

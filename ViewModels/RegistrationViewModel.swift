@@ -11,6 +11,7 @@ import CoreData
 final class RegistrationViewModel {
     
     var onMessageChanged: ((String) -> Void)?
+    var onRegistrationSuccess: (() -> Void)?
     
     
     func createAccount(with registration: Registration) {
@@ -60,12 +61,12 @@ final class RegistrationViewModel {
         
         // Save User
         do {
-            try context.save()
-            onMessageChanged?("Your account has been successfully created.")
-        } catch {
-            print("Failed to save user: \(error)")
-            onMessageChanged?("Something went wrong. Please try again.")
-        }
+                 try context.save()
+                 onRegistrationSuccess?()
+             } catch {
+                 print("Failed to save user: \(error)")
+                 onMessageChanged?("Something went wrong. Please try again.")
+             }
     }
     
     private func userExists(email: String) -> Bool {

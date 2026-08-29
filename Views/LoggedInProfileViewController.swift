@@ -159,6 +159,7 @@ final class LoggedInProfileViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true , animated: false)
+        configure()
     }
     
     private func setupUI() {

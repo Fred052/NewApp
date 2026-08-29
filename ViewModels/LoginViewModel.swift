@@ -42,8 +42,9 @@ final class LoginViewModel {
         do {
             let users = try context.fetch(request)
             
-            if users.first != nil {
-                UserDefaults.standard.set(true, forKey: "isLoggedIn")
+            if let loggedInUser = users.first {
+                UserDefaults.standard.set(true, forKey: "IsLoggedIn")
+                UserDefaults.standard.set(loggedInUser.email, forKey: "LoggedInUserEmail")
                 onLoginSuccess?()
             } else {
                 onMessageChanged?("Email or password is incorrect.")
